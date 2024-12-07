@@ -17,16 +17,15 @@ app.use(express.json());
 
 // Configuración de CORS
 app.use(cors({
-    origin: 'http://localhost:4200',
-    credentials: true,
+    origin: 'https://astonishing-banoffee-581259.netlify.app',
+    
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
 
 // Manejo explícito de solicitudes preflight
 app.options('*', cors({
-    origin: 'http://localhost:4200',
-    credentials: true
+    origin: 'http://localhost:4200'
 }));
 
 // Logs para depuración (opcional)
