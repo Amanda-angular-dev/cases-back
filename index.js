@@ -51,19 +51,10 @@ app.use('/uploads', express.static(path.resolve(__dirname, 'uploads')));
 // Rutas de la aplicación
 routes(app);
 
-app.use(express.static(path.join(__dirname, '/public')))
-app.get('/', (req, res) => {
- res.sendFile(path.join(__dirname + '/public/index.html'))
-})
-app.get('/home', (req, res) => {
-  res.sendFile(path.join(__dirname + '/public/index.html'))
-})
 
 
-// Endpoint adicional (de ejemplo)
-app.post('/notification', (req, res) => {
-    res.status(200).json({ message: 'Notificación recibida correctamente' });
-});
+
+
 
 // Inicio del servidor
 const PORT = process.env.PORT || 3000;
