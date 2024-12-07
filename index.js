@@ -15,24 +15,13 @@ const config = obtenerValoresDeEntorno();
 // Middleware para analizar JSON
 app.use(express.json());
 
-// Configuración de CORS
-app.use(cors({
-    origin: 'https://astonishing-banoffee-581259.netlify.app',
-    
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
-}));
-
-// Manejo explícito de solicitudes preflight
-app.options('*', cors({
-    origin: 'https://astonishing-banoffee-581259.netlify.app'
-}));
+// CORS (ahora simplificado porque compartes URL)
+app.use(cors());
 
 // Logs para depuración (opcional)
 app.use((req, res, next) => {
     console.log('Request Method:', req.method);
-    console.log('Request Headers:', req.headers);
-    console.log('Request Origin:', req.headers.origin);
+    console.log('Request URL:', req.url);
     next();
 });
 
@@ -44,24 +33,16 @@ app.use(fileUpload({
     limits: { fileSize: 4 * 1024 * 1024 } // 4 MB
 }));
 
-// Configuración de archivos estáticos
-//app.use('/static', express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static(path.resolve(__dirname, 'uploads')));
-
-// Rutas de la aplicación
+// Rutas de la API
 routes(app);
 
-app.use(express.static(path.join(__dirname, '/public')))
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname + '/public/index.html'))
-})
-app.get('/home', (req, res) => {
-  res.sendFile(path.join(__dirname + '/public/index.html'))
-})
+// Servir archivos estáticos del frontend
+app.use(express.static(path.join(__dirname, 'public')));
 
-
-
-
+// Redirigir todas las rutas desconocidas al frontend
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 // Inicio del servidor
 const PORT = process.env.PORT || 3000;
