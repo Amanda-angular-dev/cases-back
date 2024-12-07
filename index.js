@@ -25,7 +25,7 @@ app.use(cors({
 
 // Manejo explícito de solicitudes preflight
 app.options('*', cors({
-    origin: 'http://localhost:4200'
+    origin: 'https://astonishing-banoffee-581259.netlify.app'
 }));
 
 // Logs para depuración (opcional)
