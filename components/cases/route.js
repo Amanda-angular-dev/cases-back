@@ -10,8 +10,7 @@ router.get('/cases', controller.getCases);
 // Middleware para proteger todas las rutas
 router.use(verifyToken);
 
-// Obtener todos los documentos
-router.get('/cases', controller.getCases);
+
 
 // Agregar un nuevo documento
 router.post('/cases', controller.addCase);
