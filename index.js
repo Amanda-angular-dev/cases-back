@@ -46,11 +46,20 @@ app.use(fileUpload({
 }));
 
 // Configuración de archivos estáticos
-app.use('/static', express.static(path.join(__dirname, 'public')));
+//app.use('/static', express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.resolve(__dirname, 'uploads')));
 
 // Rutas de la aplicación
 routes(app);
+
+app.use(express.static(path.join(__dirname, '/public')))
+app.get('/', (req, res) => {
+ res.sendFile(path.join(__dirname + '/public/index.html'))
+})
+app.get('/home', (req, res) => {
+  res.sendFile(path.join(__dirname + '/public/index.html'))
+})
+
 
 // Endpoint adicional (de ejemplo)
 app.post('/notification', (req, res) => {
