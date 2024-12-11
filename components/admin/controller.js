@@ -66,6 +66,7 @@ adminCtrl.loginAdmin = async (req)=>{
         		rol: user.rol
 			}
 		const token = jwt.sign(payload,config.KEY_SECRET_TOKEN,{expiresIn:'3h'})
+        
 
 
 

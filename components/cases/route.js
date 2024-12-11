@@ -19,6 +19,6 @@ router.post('/cases', controller.addCase);
 router.put('/cases/add-quantity', controller.addQuantity);
 
 // Restar cantidad a un documento existente
-router.put('/cases/subtract-quantity', controller.subtractQuantity);
+router.put('/cases/edit-quantity', controller.editQuantity);
 
 module.exports = router;

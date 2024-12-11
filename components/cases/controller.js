@@ -1,9 +1,7 @@
-const modelo = require('./model.js')
+const modelo = require('./model.js'); // Modelo de productos
+const RegistroDetalle = require('./../detalles/model.js'); // Modelo para los detalles
 
-const phoneCasesCtrl = {}
-
-
-
+const phoneCasesCtrl = {};
 
 // Obtener todos los documentos
 phoneCasesCtrl.getCases = async (req, res) => {
@@ -31,6 +29,15 @@ phoneCasesCtrl.addCase = async (req, res) => {
       ultimaFechaActualizacion: new Date(),
     });
     const savedItem = await newItem.save();
+
+    // Registrar detalle
+    const registro = new RegistroDetalle({
+      itemId: savedItem._id,
+      accion: 'agregado',
+      cantidadCambiada: cantidad,
+    });
+    await registro.save();
+
     res.status(201).json({ message: "Documento agregado exitosamente.", item: savedItem });
   } catch (error) {
     console.error("Error al agregar documento:", error);
@@ -56,6 +63,14 @@ phoneCasesCtrl.addQuantity = async (req, res) => {
     item.ultimaFechaActualizacion = new Date();
     await item.save();
 
+    // Registrar detalle
+    const registro = new RegistroDetalle({
+      itemId: item._id,
+      accion: 'cantidad agregada',
+      cantidadCambiada: cantidad,
+    });
+    await registro.save();
+
     res.json({ message: "Cantidad agregada exitosamente.", item });
   } catch (error) {
     console.error("Error al sumar cantidad:", error);
@@ -63,34 +78,34 @@ phoneCasesCtrl.addQuantity = async (req, res) => {
   }
 };
 
-// Restar cantidad
-phoneCasesCtrl.subtractQuantity = async (req, res) => {
-  const { _id, cantidad } = req.body;
-
-  if (!_id || !cantidad || cantidad <= 0) {
-    return res.status(400).json({ message: "ID y cantidad positiva son obligatorios." });
-  }
-
+phoneCasesCtrl.editQuantity = async (req, res) => {
+  const { _id, cantidad, nota } = req.body;
+ console.log(nota)
   try {
     const item = await modelo.findById(_id);
     if (!item) {
       return res.status(404).json({ message: "Documento no encontrado." });
     }
 
-    const nuevaCantidad = item.cantidad - cantidad;
-    if (nuevaCantidad < 0) {
-      return res.status(400).json({ message: "La cantidad resultante no puede ser negativa." });
-    }
-
-    item.cantidad = nuevaCantidad;
+    item.cantidad += cantidad;
     item.ultimaFechaActualizacion = new Date();
     await item.save();
 
-    res.json({ message: "Cantidad restada exitosamente.", item });
+    const registro = new RegistroDetalle({
+      itemId: item._id,
+      accion: cantidad > 0 ? 'cantidad agregada' : 'cantidad restada',
+      cantidadCambiada: cantidad,
+      nota: nota || null,
+    });
+    await registro.save();
+
+    res.json({ message: "Cantidad actualizada exitosamente.", item });
   } catch (error) {
-    console.error("Error al restar cantidad:", error);
+    console.error("Error al editar cantidad:", error);
     res.status(500).json({ message: "Error interno del servidor." });
   }
 };
 
+
 module.exports = phoneCasesCtrl;
+
