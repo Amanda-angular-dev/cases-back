@@ -87,7 +87,7 @@ phoneCasesCtrl.editQuantity = async (req, res) => {
       return res.status(404).json({ message: "Documento no encontrado." });
     }
 
-    item.cantidad += cantidad;
+    item.cantidad = cantidad;
     item.ultimaFechaActualizacion = new Date();
     await item.save();
 
