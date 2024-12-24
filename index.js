@@ -1,5 +1,4 @@
 
-
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -15,8 +14,10 @@ const config = obtenerValoresDeEntorno();
 // Middleware para analizar JSON
 app.use(express.json());
 
-// CORS (ahora simplificado porque compartes URL)
+
+
 app.use(cors());
+
 
 // Logs para depuración (opcional)
 app.use((req, res, next) => {
@@ -43,6 +44,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+
+
 
 // Inicio del servidor
 const PORT = process.env.PORT || 3000;
