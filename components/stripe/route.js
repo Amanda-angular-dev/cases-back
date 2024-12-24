@@ -1,6 +1,5 @@
-const obtenerValoresDeEntorno = require('./../../environment/getEnvironment.js')
-const config =obtenerValoresDeEntorno()
-const stripe = require('stripe')(config.KEY_STRIPE_SECRET);
+
+const stripe = require('stripe')(process.env.KEY_STRIPE_SECRET);
 var express = require ('express')
 
 var router = express.Router()
