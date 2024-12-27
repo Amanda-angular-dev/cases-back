@@ -1,5 +1,6 @@
 
-const stripe = require('stripe')(process.env.KEY_STRIPE_SECRET);
+//const stripe = require('stripe')(process.env.KEY_STRIPE_SECRET);
+const stripe = require('stripe')("sk_test_51QYl1bP3HVbUgKNLVrS6WXUPoB8e7Qa0eJkK7GrLssjXrbshItgKTTQXKunOGPWhLOnespx8o4vPvcmtMoocxcuw00WLJfgjEm");
 var express = require ('express')
 
 var router = express.Router()
@@ -7,8 +8,9 @@ var router = express.Router()
 
 
 
+
 router.post('/', async (req, res) => {
-  const { name, price, quantity, border_color } = req.body; // Capturamos los datos del frontend
+  const { name, price, quantity, border_color, image } = req.body; // Capturamos los datos del frontend
 
   try {
   	// Construir las URLs dinámicamente
@@ -37,6 +39,7 @@ router.post('/', async (req, res) => {
             currency: 'usd',
             product_data: {
               name: `phone case - ${name}`, // Anexamos el nombre enviado desde el frontend
+              images: ['https://via.placeholder.com/300'], // Enviar la imagen a Stripe
             },
             unit_amount: unitAmountInCents, // Precio convertido a centavos
           },
