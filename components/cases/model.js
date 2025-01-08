@@ -15,6 +15,8 @@ const itemSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  dx: { type: String, enum: ["2d", "3d"], required: true }, // Solo "2d" o "3d"
+  borderColor: { type: String, enum: ["transparent", "white", "black"], required: true },
 });
 
 // Crear el modelo basado en el esquema

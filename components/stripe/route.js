@@ -10,7 +10,7 @@ var router = express.Router()
 
 
 router.post('/', async (req, res) => {
-  const { name, price, quantity, border_color, image } = req.body; // Capturamos los datos del frontend
+  const { namePhone, price, quantity, border_color, image } = req.body; // Capturamos los datos del frontend
 
   try {
   	// Construir las URLs dinámicamente
@@ -38,7 +38,7 @@ router.post('/', async (req, res) => {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: `phone case - ${name}`, // Anexamos el nombre enviado desde el frontend
+              name: `phone case - ${namePhone}`, // Anexamos el nombre enviado desde el frontend
               images: ['https://via.placeholder.com/300'], // Enviar la imagen a Stripe
             },
             unit_amount: unitAmountInCents, // Precio convertido a centavos
