@@ -27,7 +27,15 @@ app.use(cors());
 
 // Configuración para servir archivos estáticos
 app.use('/uploads', express.static(path.resolve(__dirname, 'uploads')));
-app.use('/static', express.static(path.resolve(__dirname, 'public')));
+
+// Servir archivos estáticos del frontend
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Conexión a la base de datos
+DBconection();
+
+// Rutas de la API
+routes(app);
 
 // Ruta para descargar la imagen
 app.get('/download/:fileName', (req, res) => {
@@ -43,12 +51,10 @@ app.get('/download/:fileName', (req, res) => {
   });
 });
 
-// Conexión a la base de datos
-DBconection();
 
 
-// Rutas de la API
-routes(app);
+
+
 
 
 
