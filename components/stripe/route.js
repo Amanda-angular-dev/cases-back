@@ -9,28 +9,45 @@ var router = express.Router()
 
 
 
-router.post('/', async (req, res) => {
-  const { namePhone, price, quantity, border_color, image } = req.body; // Capturamos los datos del frontend
 
+router.post('/', async (req, res) => {
+  
+  // Desestructurar datos del body
+    const {
+      productName,
+      productPrice,
+      productQuantity,
+      productBorderColor,
+      id,
+      imagen
+    } = req.body;
   try {
   	// Construir las URLs dinámicamente
-    const host = req.get('host'); // Obtener el dominio desde el request
-    const protocol = req.protocol; // Obtener el protocolo (http o https)
+    //const host = req.get('host'); // Obtener el dominio desde el request
+    //const protocol = req.protocol; // Obtener el protocolo (http o https)
+    //const successUrl = `${protocol}://${host}/success`; // URL de éxito
+    //const cancelUrl = `${protocol}://${host}/cancel`; // URL de cancelación
+    //esto de arriba es la configuracion correcta de los endpoint de success y cancel cuando la software este en produccion
 
-    const successUrl = `${protocol}://${host}/success`; // URL de éxito
-    const cancelUrl = `${protocol}://${host}/cancel`; // URL de cancelación
-    // Lógica para convertir el precio recibido en dólares a centavos
+    // Establece el puerto 4200 como destino del frontend
+    //esto de aca es para probar la aplicacin en angular en local , sino daba erroes en esas redirecciones
+    const frontendHost = 'http://localhost:4200'; // Cambiar si usas un dominio diferente en producción
+
+    const successUrl = `${frontendHost}/success`; // URL de éxito
+    const cancelUrl = `${frontendHost}/cancel`;  // URL de cancelación
+    
+     // Lógica para convertir el precio recibido en dólares a centavos
     let unitAmountInCents;
-    if (price === 60) {
+    if (productPrice === 60) {
       unitAmountInCents = 6000; // $60 -> 6000 centavos
-    } else if (price === 90) {
+    } else if (productPrice === 90) {
       unitAmountInCents = 9000; // $90 -> 9000 centavos
     } else {
       // Si el precio no es 60 ni 90, calcula de forma genérica
-      unitAmountInCents = price * 100; // Convertir cualquier valor recibido en dólares a centavos
+      unitAmountInCents = productPrice* 100; // Convertir cualquier valor recibido en dólares a centavos
     }
 
-    // Crear la sesión de Stripe
+     // Crear la sesión de Stripe
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'], // Métodos de pago
       line_items: [
@@ -38,18 +55,20 @@ router.post('/', async (req, res) => {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: `phone case - ${namePhone}`, // Anexamos el nombre enviado desde el frontend
+              name: `phone case - ${productName}`, // Anexamos el nombre enviado desde el frontend
               images: ['https://via.placeholder.com/300'], // Enviar la imagen a Stripe
             },
             unit_amount: unitAmountInCents, // Precio convertido a centavos
           },
-          quantity: quantity, // Cantidad enviada desde el frontend
+          quantity: productQuantity, // Cantidad enviada desde el frontend
         },
       ],
       mode: 'payment', // Modo de pago único
       success_url: successUrl, // URL dinámica de éxito
       cancel_url: cancelUrl,   // URL dinámica de cancelación
-     
+      metadata: {
+        orderId:id, // Vincular el ID de la orden con la sesión de Stripe
+      },
      
     });
 
