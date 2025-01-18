@@ -28,8 +28,8 @@ app.use(cors());
 // Configuración para servir archivos estáticos
 //app.use('/uploads', express.static(path.resolve(__dirname, 'uploads')));
 
-// Servir archivos estáticos del frontend
-app.use(express.static(path.join(__dirname, 'public')));
+// Sirve el contenido estático primero
+app.use(express.static(path.resolve(__dirname, 'public')));
 
 // Conexión a la base de datos
 DBconection();
