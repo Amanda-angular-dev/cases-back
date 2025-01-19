@@ -93,7 +93,7 @@ phoneCasesCtrl.addOrder = async (req, res) => {
       userAddress,
       finalCanvasImage: `/${file1Name}`, // Ruta de la primera imagen
       //extraImage: `/${file2Name}`, // Ruta de la segunda imagen
-      state:'pendiente'
+      status:'pendiente'
     });
 
     // Guardar la orden en la base de datos
