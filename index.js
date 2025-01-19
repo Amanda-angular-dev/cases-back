@@ -5,14 +5,14 @@ const cors = require('cors');
 const routes = require('./routers.js');
 const DBconection = require('./db.js');
 const obtenerValoresDeEntorno = require('./environment/getEnvironment.js');
-//const fileUpload = require('express-fileupload');
+const fileUpload = require('express-fileupload');
 
 // Configuración de variables de entorno
 const config = obtenerValoresDeEntorno();
 
 // Middleware para analizar JSON y manejar archivos
 app.use(express.json());
-//app.use(fileUpload());
+app.use(fileUpload());
 app.use(cors());
 
 // Configuración para servir archivos estáticos
