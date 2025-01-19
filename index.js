@@ -1,4 +1,3 @@
-
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -6,29 +5,18 @@ const cors = require('cors');
 const routes = require('./routers.js');
 const DBconection = require('./db.js');
 const obtenerValoresDeEntorno = require('./environment/getEnvironment.js');
-const fileUpload = require('express-fileupload'); // Middleware para manejar archivos
-
+const fileUpload = require('express-fileupload');
 
 // Configuración de variables de entorno
 const config = obtenerValoresDeEntorno();
 
-// Middleware para analizar JSON
+// Middleware para analizar JSON y manejar archivos
 app.use(express.json());
 app.use(fileUpload());
-
-
-//configuracion para servir archivos estaticos------
-// Obtén la ruta absoluta de la carpeta de archivos estáticos
-const uploadsPath = path.resolve(__dirname, 'uploads');
-// Sirve archivos estáticos desde la ruta absoluta
-
-
 app.use(cors());
 
 // Configuración para servir archivos estáticos
-//app.use('/uploads', express.static(path.resolve(__dirname, 'uploads')));
-
-// Sirve el contenido estático primero
+app.use('/uploads', express.static(path.resolve(__dirname, 'uploads')));
 app.use(express.static(path.resolve(__dirname, 'public')));
 
 // Conexión a la base de datos
@@ -40,9 +28,8 @@ routes(app);
 // Ruta para descargar la imagen
 app.get('/download/:fileName', (req, res) => {
   const fileName = req.params.fileName;
-  const filePath = path.join(__dirname, 'uploads', fileName); // Cambia 'uploads' por la carpeta donde están las imágenes
+  const filePath = path.join(__dirname, 'uploads', fileName);
 
-  // Verificar si el archivo existe
   res.download(filePath, fileName, (err) => {
     if (err) {
       console.error('Error al descargar el archivo:', err);
@@ -51,22 +38,13 @@ app.get('/download/:fileName', (req, res) => {
   });
 });
 
-
-
-
-
-
-
-
 // Redirigir todas las rutas desconocidas al frontend
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
-
-
 
 // Inicio del servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en el puerto ${PORT}`);
+  console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
