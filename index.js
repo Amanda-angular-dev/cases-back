@@ -16,7 +16,7 @@ app.use(fileUpload());
 app.use(cors());
 
 // Configuración para servir archivos estáticos
-//app.use('/uploads', express.static(path.resolve(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.resolve(__dirname, 'uploads')));
 //app.use('/', express.static(path.resolve(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, '/public')))
 app.get('/', (req, res) => {
