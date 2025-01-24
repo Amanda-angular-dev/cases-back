@@ -5,11 +5,16 @@ const verifyToken = require('./../../middelwares/verifyTokenValid')
 //const stripe = require('stripe')(process.env.KEY_STRIPE_SECRET);
 const stripe = require('stripe')("sk_test_51QYl1bP3HVbUgKNLVrS6WXUPoB8e7Qa0eJkK7GrLssjXrbshItgKTTQXKunOGPWhLOnespx8o4vPvcmtMoocxcuw00WLJfgjEm");
 const bodyParser = require('body-parser');
-
+const fileUpload = require('express-fileupload'); // Middleware para manejar archivos
 
 // Configuración para manejar los webhooks
 router.use(bodyParser.raw({ type: 'application/json' }));
-
+// Middleware para manejar carga de archivos
+router.use(fileUpload({
+  useTempFiles: true,       // Permitir archivos temporales
+  tempFileDir: '/tmp/',     // Directorio temporal para almacenar archivos
+  limits: { fileSize: 10 * 1024 * 1024 }, // Tamaño máximo del archivo (10 MB)
+}));
 // Ruta del webhook
 router.post('/webhook-stripe', (req, res) => {
     const endpointSecret = 'whsec_wXi0uya84EoztVAdb084lemHjEX2psW6'; // De la configuración en Stripe

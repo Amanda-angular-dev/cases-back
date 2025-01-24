@@ -18,6 +18,7 @@ router.post('/', async (req, res) => {
       productPrice,
       productQuantity,
       productBorderColor,
+      dx,
       id,
       imagen
     } = req.body;
@@ -55,8 +56,9 @@ router.post('/', async (req, res) => {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: `phone case - ${productName}`, // Anexamos el nombre enviado desde el frontend
-              images: ['https://via.placeholder.com/300'], // Enviar la imagen a Stripe
+              name: `phone case - ${productName} - `, // Anexamos el nombre enviado desde el frontend
+              description: `border color ${productBorderColor} -  ${dx}.`, 
+              images: [imagen], // Enviar la imagen a Stripe
             },
             unit_amount: unitAmountInCents, // Precio convertido a centavos
           },

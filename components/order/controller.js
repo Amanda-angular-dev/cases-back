@@ -2,14 +2,21 @@ const modelo = require('./model.js'); // Modelo de productos
 
 //const stripe = require('stripe')(process.env.KEY_STRIPE_SECRET);
 const stripe = require('stripe')("sk_test_51QYl1bP3HVbUgKNLVrS6WXUPoB8e7Qa0eJkK7GrLssjXrbshItgKTTQXKunOGPWhLOnespx8o4vPvcmtMoocxcuw00WLJfgjEm");
-const multer = require('multer');
+
 const Order = require('./model.js')
 const path = require('path');
+const cloudinary = require('cloudinary').v2;
+//const { v4: uuidv4 } = require('uuid');
 
-const { v4: uuidv4 } = require('uuid');
-const fileUpload = require('express-fileupload'); // Middleware para manejar archivos
 
-
+cloudinary.config({
+  //cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  //api_key: process.env.CLOUDINARY_API_KEY,
+  //api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: 'dv7ovrttk',
+  api_key:'887943832462313',
+  api_secret: 'jQv2odAGf_zNSIreHudKI9GKqdQ',
+});
 
 // Controlador para agregar una nueva orden
 const phoneCasesCtrl = {};
@@ -26,8 +33,23 @@ phoneCasesCtrl.addOrder = async (req, res) => {
 
     const file1 = req.files.image;
     
-    //const file2 = req.files.originalImage;
+    const file2 = req.files.originalImage;
     
+    //const file3 = req.files.tercerImage;
+
+  
+    // Subir la imagen a Cloudinary
+    const result1 = await cloudinary.uploader.upload(file1.tempFilePath, {
+      folder: 'uploads', // Carpeta en Cloudinary
+    });
+
+    const result2 = await cloudinary.uploader.upload(file2.tempFilePath, {
+      folder: 'uploads', // Carpeta en Cloudinary
+    });
+
+   // const result3 = await cloudinary.uploader.upload(file3.tempFilePath, {
+   //   folder: 'uploads', // Carpeta en Cloudinary
+   // });
 
      // Validar la extensión de los archivos
     const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
@@ -43,15 +65,15 @@ phoneCasesCtrl.addOrder = async (req, res) => {
     }
 
     // Generar nombres únicos para los archivos
-    const file1Name = `${uuidv4()}.${file1Extension}`;
+    //const file1Name = `${uuidv4()}.${file1Extension}`;
     //const file2Name = `${uuidv4()}.${file2Extension}`;
 
     // Rutas para guardar las imágenes
-    const uploadPath1 = path.join(__dirname, '../../uploads', file1Name);
+    //const uploadPath1 = path.join(__dirname, '../../uploads', file1Name);
     //const uploadPath2 = path.join(__dirname, '../../uploads', file2Name);
 
     // Mover los archivos a la carpeta `uploads`
-    await file1.mv(uploadPath1);
+    //await file1.mv(uploadPath1);
     //await file2.mv(uploadPath2);
  
     // Desestructurar datos del body
@@ -91,8 +113,9 @@ phoneCasesCtrl.addOrder = async (req, res) => {
       userEmail,
       userPhone,
       userAddress,
-      finalCanvasImage: `/${file1Name}`, // Ruta de la primera imagen
-      //extraImage: `/${file2Name}`, // Ruta de la segunda imagen
+      finalCanvasImage: result1.secure_url, // Ruta de la primera imagen
+      originalImage: result2.secure_url, // Ruta de la segunda imagen
+      
       status:'pendiente'
     });
 
