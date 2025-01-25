@@ -16,7 +16,7 @@ router.use(fileUpload({
   limits: { fileSize: 10 * 1024 * 1024 }, // Tamaño máximo del archivo (10 MB)
 }));
 // Ruta del webhook
-router.post('/webhook-stripe', (req, res) => {
+router.post('/webhook-stripe', async (req, res) => {
     const endpointSecret = 'whsec_wXi0uya84EoztVAdb084lemHjEX2psW6'; // De la configuración en Stripe
 
     const sig = req.headers['stripe-signature'];
