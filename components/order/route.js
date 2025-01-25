@@ -33,17 +33,50 @@ router.post('/webhook-stripe', (req, res) => {
 
     // Manejar diferentes eventos
     switch (event.type) {
-        case 'payment_intent.succeeded':
-            const paymentIntent = event.data.object;
-            console.log('💰 Payment succeeded:', paymentIntent);
-            // Realiza la acción necesaria aquí
-            break;
+        case 'checkout.session.completed': { // Evento más común al usar Stripe Checkout
+            const session = event.data.object;
 
-        case 'payment_intent.canceled':
-            const canceledIntent = event.data.object;
-            console.log('❌ Payment canceled:', canceledIntent);
-            // Realiza la acción necesaria aquí
+            try {
+                // Buscar la orden usando stripeSessionId
+                const order = await Order.findOne({ stripeSessionId: session.id });
+                if (!order) {
+                    console.error(`⚠️ Orden no encontrada para stripeSessionId: ${session.id}`);
+                    return res.status(404).send();
+                }
+
+                // Actualizar el estado de la orden a "pagada"
+                order.status = 'pagada';
+                await order.save();
+
+                console.log(`✅ Orden ${order._id} actualizada a 'pagada'.`);
+            } catch (err) {
+                console.error(`❌ Error al actualizar el estado de la orden: ${err.message}`);
+                return res.status(500).send();
+            }
             break;
+        }
+
+        case 'payment_intent.canceled': {
+            const paymentIntent = event.data.object;
+
+            try {
+                // Buscar la orden usando stripeSessionId
+                const order = await Order.findOne({ stripeSessionId: paymentIntent.id });
+                if (!order) {
+                    console.error(`⚠️ Orden no encontrada para stripeSessionId: ${paymentIntent.id}`);
+                    return res.status(404).send();
+                }
+
+                // Eliminar la orden
+                await Order.findByIdAndDelete(order._id);
+
+                console.log(`✅ Orden ${order._id} eliminada correctamente.`);
+            } catch (err) {
+                console.error(`❌ Error al eliminar la orden: ${err.message}`);
+                return res.status(500).send();
+            }
+            break;
+        }
 
         default:
             console.log(`Unhandled event type ${event.type}`);
@@ -56,7 +89,7 @@ router.post('/webhook-stripe', (req, res) => {
 
 
 // Agregar un nuevo documento
-router.post('/', controller.addOrder);
+router.post('/create-checkout-session', controller.addOrder);
 
 
 

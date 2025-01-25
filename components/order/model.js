@@ -12,9 +12,9 @@ const orderSchema = new mongoose.Schema({
     userEmail: { type: String, required: true },
     finalCanvasImage: { type: String, required: true },
     originalImage: { type: String, required: true },
-   
+    stripeSessionId:{ type: String, required: true },// ID de la sesión de Stripe, útil para identificar órdenes en webhooks
     status: { type: String, enum: ["entregada", "pagada","pendiente", "realizada"], required: true },
-    stripeSessionId: { type: String }, // ID de la sesión de Stripe, útil para identificar órdenes en webhooks
+     
     createdAt: { type: Date, default: Date.now }, // Fecha de creación
     updatedAt: { type: Date, default: Date.now }, // Fecha de última actualización
 });
