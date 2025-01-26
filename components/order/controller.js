@@ -9,6 +9,7 @@ const cloudinary = require('cloudinary').v2;
 //const { v4: uuidv4 } = require('uuid');
 
 
+
 cloudinary.config({
   //cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   //api_key: process.env.CLOUDINARY_API_KEY,
@@ -23,6 +24,12 @@ const phoneCasesCtrl = {};
 
 // Controlador para agregar una nueva orden
 phoneCasesCtrl.addOrder = async (req, res) => {
+   console.log('Archivos recibidos:', req.files);
+    console.log('Datos recibidos:', req.body);
+    
+    if (!req.files) {
+      return res.status(400).json({ message: 'No se recibieron archivos.' });
+    }
   // Desestructurar datos del body
     const {
       productName,
@@ -42,7 +49,9 @@ phoneCasesCtrl.addOrder = async (req, res) => {
     if (!req.files || !req.files.image || !req.files.originalImage) {
       return res.status(400).json({ message: 'Se requieren dos imágenes.' });
     }
-
+if (!productName || !productPrice || !productQuantity || !dx || !userName || !userEmail || !userPhone || !userAddress) {
+  return res.status(400).json({ message: 'Faltan datos requeridos en la solicitud.' });
+}
     const file1 = req.files.image;
     
     const file2 = req.files.originalImage;
@@ -89,18 +98,18 @@ phoneCasesCtrl.addOrder = async (req, res) => {
     //await file2.mv(uploadPath2);
  
     // Construir las URLs dinámicamente
-    //const host = req.get('host'); // Obtener el dominio desde el request
-    //const protocol = req.protocol; // Obtener el protocolo (http o https)
-    //const successUrl = `${protocol}://${host}/success`; // URL de éxito
-    //const cancelUrl = `${protocol}://${host}/cancel`; // URL de cancelación
+    const host = req.get('host'); // Obtener el dominio desde el request
+    const protocol = req.protocol; // Obtener el protocolo (http o https)
+    const successUrl = `${protocol}://${host}/success`; // URL de éxito
+    const cancelUrl = `${protocol}://${host}/cancel`; // URL de cancelación
     //esto de arriba es la configuracion correcta de los endpoint de success y cancel cuando la software este en produccion
 
     // Establece el puerto 4200 como destino del frontend
     //esto de aca es para probar la aplicacin en angular en local , sino daba erroes en esas redirecciones
-    const frontendHost = 'http://localhost:4200'; // Cambiar si usas un dominio diferente en producción
+    // const frontendHost = 'http://localhost:4200'; // Cambiar si usas un dominio diferente en producción
 
-    const successUrl = `${frontendHost}/success`; // URL de éxito
-    const cancelUrl = `${frontendHost}/cancel`;  // URL de cancelación
+    // const successUrl = `${frontendHost}/success`; // URL de éxito
+    // const cancelUrl = `${frontendHost}/cancel`;  // URL de cancelación
     
 
     // Validar campos requeridos
@@ -172,7 +181,7 @@ phoneCasesCtrl.addOrder = async (req, res) => {
     // Enviar la respuesta con el ID de la sesión
     res.json({ id: session.id });
   } catch (error) {
-    console.error(error);
+    console.error('se recibio algo con error',error);
     res.status(500).json({ message: 'Error al crear la orden', error });
   }
 };

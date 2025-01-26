@@ -14,7 +14,12 @@ const config = obtenerValoresDeEntorno();
 
 // Middleware para analizar JSON y manejar archivos
 app.use(express.json());
-app.use(fileUpload());
+app.use(fileUpload(
+  {
+  useTempFiles: true,       // Permitir archivos temporales
+  tempFileDir: '/tmp/',     // Directorio temporal para almacenar archivos
+  limits: { fileSize: 10 * 1024 * 1024 }, // Tamaño máximo del archivo (10 MB)
+}));
 app.use(cors());
 
 // Configuración para servir archivos estáticos
