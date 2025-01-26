@@ -172,7 +172,7 @@ if (!productName || !productPrice || !productQuantity || !dx || !userName || !us
       finalCanvasImage: result1.secure_url, // Ruta de la primera imagen
       originalImage: result2.secure_url, // Ruta de la segunda imagen
       stripeSessionId: session.id,
-      status:'pendiente'
+      status:'pagada'
     });
 
     // Guardar la orden en la base de datos
