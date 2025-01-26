@@ -8,7 +8,7 @@ const obtenerValoresDeEntorno = require('./environment/getEnvironment.js');
 const axios = require('axios');
 const fs = require('fs');
 const fileUpload = require('express-fileupload');
-const stripe = require('stripe')("sk_test_51QYl1bP3HVbUgKNLVrS6WXUPoB8e7Qa0eJkK7GrLssjXrbshItgKTTQXKunOGPWhLOnespx8o4vPvcmtMoocxcuw00WLJfgjEm");
+const stripe = require('stripe')("sk_test_51QYl2A04SWFox9M9QsJVuPbQIMZprhiZYehwd9FTytsOGIlXP23sLGaiXfxDs9VHy9OTMk72Bu7Qmn2MZZvrxjIM00g8rDD0JQ");
 
 // Configuración de variables de entorno
 const config = obtenerValoresDeEntorno();

@@ -1,7 +1,7 @@
 const modelo = require('./model.js'); // Modelo de productos
 
 //const stripe = require('stripe')(process.env.KEY_STRIPE_SECRET);
-const stripe = require('stripe')("sk_test_51QYl1bP3HVbUgKNLVrS6WXUPoB8e7Qa0eJkK7GrLssjXrbshItgKTTQXKunOGPWhLOnespx8o4vPvcmtMoocxcuw00WLJfgjEm");
+const stripe = require('stripe')("sk_test_51QYl2A04SWFox9M9QsJVuPbQIMZprhiZYehwd9FTytsOGIlXP23sLGaiXfxDs9VHy9OTMk72Bu7Qmn2MZZvrxjIM00g8rDD0JQ");
 
 const Order = require('./model.js')
 const path = require('path');
@@ -172,7 +172,7 @@ if (!productName || !productPrice || !productQuantity || !dx || !userName || !us
       finalCanvasImage: result1.secure_url, // Ruta de la primera imagen
       originalImage: result2.secure_url, // Ruta de la segunda imagen
       stripeSessionId: session.id,
-      status:'pagada'
+      status:'pendiente'
     });
 
     // Guardar la orden en la base de datos
