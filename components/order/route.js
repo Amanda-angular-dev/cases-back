@@ -10,7 +10,8 @@ const bodyParser = require('body-parser');
 
 // Ruta del webhook para Stripe
 router.post('/webhook-stripe', bodyParser.raw({ type: 'application/json' }),  async (req, res) => {
-  const endpointSecret = 'whsec_wXi0uya84EoztVAdb084lemHjEX2psW6'; // Secreto del webhook de Stripe
+  const endpointSecret = 'whsec_wXi0uya84EoztVAdb084lemHjEX2psW6';
+   // Secreto del webhook de Stripe
   const sig = req.headers['stripe-signature'];
   let event;
 

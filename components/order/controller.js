@@ -100,8 +100,8 @@ if (!productName || !productPrice || !productQuantity || !dx || !userName || !us
     // Construir las URLs dinámicamente
     const host = req.get('host'); // Obtener el dominio desde el request
     const protocol = req.protocol; // Obtener el protocolo (http o https)
-    const successUrl = `${protocol}://${host}/success`; // URL de éxito
-    const cancelUrl = `${protocol}://${host}/cancel`; // URL de cancelación
+    const successUrl = `https://cases-back.vercel.app/success`; // URL de éxito
+    const cancelUrl = `https://cases-back.vercel.app/cancel`; // URL de cancelación
     //esto de arriba es la configuracion correcta de los endpoint de success y cancel cuando la software este en produccion
 
     // Establece el puerto 4200 como destino del frontend
