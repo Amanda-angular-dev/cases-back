@@ -15,5 +15,5 @@ router.use(verifyToken);
 router.get('/', controller.getOrders);
 router.get('/:itemId', controller.getOrder);
 router.put('/delete', controller.deleteOrder);
-
+router.put("/update-status/:id", controller.updateOrderStatus);
 module.exports = router;

@@ -186,6 +186,43 @@ if (!productName || !productPrice || !productQuantity || !dx || !userName || !us
   }
 };
 
+phoneCasesCtrl.updateOrderStatus = async (req, res) => {
+  const { id } = req.params; // ID del pedido desde los parámetros de la URL
+  const { status } = req.body; // Nuevo valor de status desde el cuerpo de la solicitud
+
+  // Validar que el campo status esté presente
+  if (!status) {
+    return res.status(400).json({ error: "El campo 'status' es obligatorio." });
+  }
+
+  // Validar que el nuevo estado esté dentro de los valores permitidos
+  const validStatuses = ["entregada", "pagada", "pendiente", "realizada"];
+  if (!validStatuses.includes(status)) {
+    return res
+      .status(400)
+      .json({ error: `El valor de 'status' debe ser uno de: ${validStatuses.join(", ")}` });
+  }
+
+  try {
+    // Actualizar el estado del pedido
+    const order = await Order.findOneAndUpdate(
+      { _id: id }, // Buscar el pedido por _id
+      { status, updatedAt: Date.now() }, // Actualiza también el campo updatedAt
+      { new: true } // Devuelve el documento actualizado
+    );
+
+    // Si no se encuentra el pedido
+    if (!order) {
+      return res.status(404).json({ error: "Pedido no encontrado." });
+    }
+
+    // Respuesta exitosa
+    res.status(200).json({ message: "Estado actualizado con éxito.", order });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al actualizar el estado del pedido." });
+  }
+};
 
 
 // Obtener todos los documentos
