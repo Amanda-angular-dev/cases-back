@@ -38,9 +38,14 @@ phoneCasesCtrl.addOrder = async (req, res) => {
       productBorderColor,
       dx,
       userName,
+      userlastName,
       userEmail,
       userPhone,
-      userAddress,
+      userstreetName,
+      userstreetNumber,
+      userCity,
+      userState,
+      userZipCode
     } = req.body;
   try {
     console.log('Cuerpo de la solicitud:', req.body);
@@ -155,7 +160,8 @@ if (!productName || !productPrice || !productQuantity || !dx || !userName || !us
    
   
    
-     
+     // Construir la dirección completa del usuario
+    const userAddress = `${userStreetName} ${userStreetNumber}, ${userCity}, ${userState}, ${userZipCode}`;
      
     
     // Crear una nueva orden
@@ -165,10 +171,12 @@ if (!productName || !productPrice || !productQuantity || !dx || !userName || !us
       productQuantity: Number(productQuantity),
       productBorderColor,
       dx,
-      userName,
+      userName: `${userName} ${userLastName}`,
+      
       userEmail,
       userPhone,
       userAddress,
+
       finalCanvasImage: result1.secure_url, // Ruta de la primera imagen
       originalImage: result2.secure_url, // Ruta de la segunda imagen
       stripeSessionId: session.id,
