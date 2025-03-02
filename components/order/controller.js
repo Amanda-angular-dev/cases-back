@@ -38,11 +38,11 @@ phoneCasesCtrl.addOrder = async (req, res) => {
       productBorderColor,
       dx,
       userName,
-      userlastName,
+      userLastName,
       userEmail,
       userPhone,
-      userstreetName,
-      userstreetNumber,
+      userStreetName,
+      userStreetNumber,
       userCity,
       userState,
       userZipCode
@@ -54,7 +54,7 @@ phoneCasesCtrl.addOrder = async (req, res) => {
     if (!req.files || !req.files.image || !req.files.originalImage) {
       return res.status(400).json({ message: 'Se requieren dos imágenes.' });
     }
-if (!productName || !productPrice || !productQuantity || !dx || !userName || !userEmail || !userPhone || !userAddress) {
+if (!productName || !productPrice || !productQuantity || !dx || !userName || !userEmail || !userPhone ) {
   return res.status(400).json({ message: 'Faltan datos requeridos en la solicitud.' });
 }
     const file1 = req.files.image;
@@ -73,9 +73,7 @@ if (!productName || !productPrice || !productQuantity || !dx || !userName || !us
       folder: 'uploads', // Carpeta en Cloudinary
     });
 
-   // const result3 = await cloudinary.uploader.upload(file3.tempFilePath, {
-   //   folder: 'uploads', // Carpeta en Cloudinary
-   // });
+    const result3 = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDd_AEjFnkaM0ZJtW9UXVojPzeH2wYzNIwtQ&s'
 
      // Validar la extensión de los archivos
     const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
